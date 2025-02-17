@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사주 분석</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>📝 사주 분석 📊</h1>
+        <p>생년월일을 입력하세요! 📅</p>
+        <input type="date" id="birthdate">
+        <button onclick="analyzeFortune()">🔍 분석하기</button>
+        <p id="analysis-result"></p>
+    </div>
+    <script>
+        function analyzeFortune() {
+            let birthdate = document.getElementById("birthdate").value;
+            if (!birthdate) {
+                alert("📅 생년월일을 입력해주세요!");
+                return;
+            }
+            document.getElementById("analysis-result").innerText = "🌟 " + birthdate + "에 태어난 당신의 운명은 밝습니다!";
+        }
+    </script>
+</body>
+</html>
