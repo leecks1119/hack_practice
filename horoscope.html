@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오늘의 운세</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🔮 오늘의 운세 ✨</h1>
+        <p id="horoscope-text">운세를 불러오는 중...</p>
+        <button onclick="goBack()">🔙 다시 선택하기</button>
+    </div>
+    <script>
+        function goBack() {
+            window.location.href = "index.html";
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let zodiac = localStorage.getItem("selectedZodiac") || "띠";
+            let horoscopeData = {
+                "쥐띠": "쥐띠 운세: 오늘은 행운이 함께할 것입니다. 🍀",
+                "소띠": "소띠 운세: 차분히 기회를 기다려 보세요. 🕰️",
+                "호랑이띠": "호랑이띠 운세: 용기 있게 도전하세요! 🐯",
+                "토끼띠": "토끼띠 운세: 조심스럽게 행동하는 것이 좋아요. 🐇",
+                "용띠": "용띠 운세: 강한 의지가 필요한 하루입니다. 🐉",
+                "뱀띠": "뱀띠 운세: 직감이 맞아떨어지는 날이에요. 🐍",
+                "말띠": "말띠 운세: 에너지가 넘치는 하루가 될 거예요. 🐴",
+                "양띠": "양띠 운세: 주변 사람과 협력하면 좋아요. 🐏",
+                "원숭이띠": "원숭이띠 운세: 유머 감각을 발휘하세요! 🐵",
+                "닭띠": "닭띠 운세: 집중력이 필요한 날입니다. 🐔",
+                "개띠": "개띠 운세: 친구와 좋은 시간을 보내세요. 🐶",
+                "돼지띠": "돼지띠 운세: 기분 좋은 일이 생길 거예요. 🐷"
+            };
+            document.getElementById("horoscope-text").innerText = horoscopeData[zodiac] || "운세 정보가 없습니다.";
+        });
+    </script>
+</body>
+</html>
