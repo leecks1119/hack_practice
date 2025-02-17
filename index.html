@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>띠 운세 선택</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🐉 오늘의 띠 운세 🔮</h1>
+        <p>띠를 선택해주세요! 👇</p>
+        <div class="zodiac-list">
+            <button class="zodiac-item" onclick="selectZodiac('쥐띠')">🐭 쥐띠</button>
+            <button class="zodiac-item" onclick="selectZodiac('소띠')">🐮 소띠</button>
+            <button class="zodiac-item" onclick="selectZodiac('호랑이띠')">🐯 호랑이띠</button>
+            <button class="zodiac-item" onclick="selectZodiac('토끼띠')">🐰 토끼띠</button>
+            <button class="zodiac-item" onclick="selectZodiac('용띠')">🐲 용띠</button>
+            <button class="zodiac-item" onclick="selectZodiac('뱀띠')">🐍 뱀띠</button>
+            <button class="zodiac-item" onclick="selectZodiac('말띠')">🐴 말띠</button>
+            <button class="zodiac-item" onclick="selectZodiac('양띠')">🐏 양띠</button>
+            <button class="zodiac-item" onclick="selectZodiac('원숭이띠')">🐵 원숭이띠</button>
+            <button class="zodiac-item" onclick="selectZodiac('닭띠')">🐔 닭띠</button>
+            <button class="zodiac-item" onclick="selectZodiac('개띠')">🐶 개띠</button>
+            <button class="zodiac-item" onclick="selectZodiac('돼지띠')">🐷 돼지띠</button>
+        </div>
+    </div>
+    <script>
+        function selectZodiac(zodiac) {
+            localStorage.setItem("selectedZodiac", zodiac);
+            window.location.href = "horoscope.html";
+        }
+    </script>
+</body>
+</html>
