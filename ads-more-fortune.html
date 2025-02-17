@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>추가 운세</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>💰 추가 운세 보기 📢</h1>
+        <button onclick="showExtraFortune()">📺 광고 보고 결과 보기</button>
+        <p id="extra-fortune-result"></p>
+    </div>
+    <script>
+        function showExtraFortune() {
+            alert("📺 광고를 시청한 후 결과를 확인할 수 있습니다.");
+            setTimeout(function() {
+                document.getElementById("extra-fortune-result").innerText = "🔮 추가 운세: 오늘 하루 즐겁게 보내세요! 😊";
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
