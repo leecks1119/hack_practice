@@ -93,10 +93,62 @@
       min-width: 300px;
       box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
     }
-    #restart-btn {
+    #restart-btn, #continue-btn {
       background-color: #FFB6C1;
       border: none;
       color: #333;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 10px 2px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    
+    #continue-btn {
+      background-color: #98FB98;
+    }
+    
+    /* 목숨 감소 효과 */
+    @keyframes damageEffect {
+      0% { opacity: 1; background-color: rgba(255, 0, 0, 0.3); }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; background-color: transparent; }
+    }
+    
+    .damage-effect {
+      animation: damageEffect 0.5s;
+    }
+    
+    /* 광고 모달 */
+    #ad-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+      display: none;
+    }
+    
+    .ad-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 80%;
+    }
+    
+    .ad-close {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
       padding: 10px 20px;
       text-align: center;
       text-decoration: none;
@@ -218,6 +270,14 @@
   </style>
 </head>
 <body>
+  <div id="ad-modal">
+    <div class="ad-content">
+      <h2>광고 시청 중...</h2>
+      <p>이어서 하기 위해 잠시만 기다려주세요.</p>
+      <p>남은 시간: <span id="ad-timer">5</span>초</p>
+      <button class="ad-close" disabled>광고 닫기</button>
+    </div>
+  </div>
   <div id="game-container">
     <div id="shield"></div>
     <div id="player"></div>
@@ -241,6 +301,7 @@
         </div>
       </div>
       <button id="restart-btn">다시 도전</button>
+      <button id="continue-btn">이어서 하기 (광고시청)</button>
     </div>
     <div id="start-screen">
       <h1>귀여운 별 피하기 게임</h1>
@@ -262,6 +323,7 @@
     let lives = 3;
     let isGameOver = false;
     let gameStarted = false;
+    let savedGameState = null; // 게임 상태 저장 변수
     let poopInterval;
     let specialPoopInterval;
     let powerUpInterval;
@@ -310,6 +372,8 @@
     document.getElementById('start-btn').addEventListener('click', startGame);
     // 다시 시작 버튼
     document.getElementById('restart-btn').addEventListener('click', restartGame);
+    // 이어서 하기 버튼
+    document.getElementById('continue-btn').addEventListener('click', showAdAndContinue);
     // 터치 이벤트 처리
     document.addEventListener('touchmove', movePlayer);
     document.addEventListener('touchstart', movePlayer);
@@ -344,10 +408,27 @@
       level = 1;
       currentExperience = 0;
       experienceForNextLevel = 10;
+      
+      // 게임 오버 화면 숨기기
+      document.getElementById('game-over').style.display = 'none';
+      
+      // 난이도 설정 적용
+      const selectedDifficulty = document.querySelector('.difficulty-btn.selected').getAttribute('data-difficulty');
+      const settings = difficultySettings[selectedDifficulty];
+      lives = settings.lives;
+      
+      // HUD 업데이트
       document.getElementById('level').textContent = level;
       document.getElementById('score').textContent = score;
       document.getElementById('lives').textContent = lives;
-      const selectedDifficulty = document.querySelector('.difficulty-btn.selected').getAttribute('data-difficulty');
+      
+      // 기존 게임 요소 정리
+      const gameElements = document.querySelectorAll('.poop, .special-poop, .power-up');
+      gameElements.forEach(el => el.remove());
+      
+      // 인터벌 설정 전 기존 인터벌 정리
+      clearAllIntervals();
+      
       applyDifficultySettings(selectedDifficulty);
       poopInterval = setInterval(createPoop, poopFrequency);
       specialPoopInterval = setInterval(createSpecialPoop, poopFrequency * 3);
@@ -389,11 +470,17 @@
 
     // 모든 인터벌 정리 함수
     function clearAllIntervals() {
-      clearInterval(poopInterval);
-      clearInterval(specialPoopInterval);
-      clearInterval(powerUpInterval);
-      clearInterval(scoreInterval);
-      clearInterval(levelUpInterval);
+      if (poopInterval) clearInterval(poopInterval);
+      if (specialPoopInterval) clearInterval(specialPoopInterval);
+      if (powerUpInterval) clearInterval(powerUpInterval);
+      if (scoreInterval) clearInterval(scoreInterval);
+      if (levelUpInterval) clearInterval(levelUpInterval);
+      
+      poopInterval = null;
+      specialPoopInterval = null;
+      powerUpInterval = null;
+      scoreInterval = null;
+      levelUpInterval = null;
     }
 
     // 별 생성 함수 (기존 똥 생성 함수 변환)
@@ -512,12 +599,22 @@ function checkCollision(poop, interval) {
   
   // 충돌 판정: 두 원의 중심 간 거리가 반경 합보다 작으면 충돌로 간주
   if (distance < playerRadius + poopRadius) {
+    // 이미 게임 오버 상태면 추가 처리 하지 않음
+    if (isGameOver) {
+      clearInterval(interval);
+      poop.remove();
+      return;
+    }
+    
     // 쉴드가 활성화되어 있다면 충돌 무시
     if (hasShield) {
       clearInterval(interval);
       poop.remove();
       return;
     }
+    
+    // 목숨 감소 효과 적용
+    applyDamageEffect();
     
     // 특수 장애물인 경우 추가 데미지 적용
     if (poop.classList.contains('special-poop')) {
@@ -530,10 +627,34 @@ function checkCollision(poop, interval) {
     clearInterval(interval);
     poop.remove();
     
+    // 목숨이 0 이하면 게임 종료
     if (lives <= 0) {
+      // 게임 종료 전 현재 상태 저장
+      lives = 0; // 목숨이 음수가 되지 않도록 보정
+      document.getElementById('lives').textContent = lives;
+      saveGameState();
       gameOver();
     }
   }
+}
+
+// 목숨 감소 효과 적용 함수
+function applyDamageEffect() {
+  const gameContainer = document.getElementById('game-container');
+  gameContainer.classList.add('damage-effect');
+  
+  // 효과음 추가 (선택적)
+  const damageSound = new Audio('data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YRAAAAAAAAAAAP//AAAAAAAAAACqAA==');
+  damageSound.volume = 0.3;
+  try {
+    damageSound.play();
+  } catch (e) {
+    console.log("브라우저에서 자동 재생이 차단되었습니다.");
+  }
+  
+  setTimeout(() => {
+    gameContainer.classList.remove('damage-effect');
+  }, 500);
 }
 
 // 원형 충돌 검사를 이용한 파워업 충돌 체크 함수
@@ -612,14 +733,131 @@ function checkPowerUpCollision(powerUp, interval) {
       progressFill.style.width = percentage + '%';
     }
 
+    // 게임 상태 저장 함수
+    function saveGameState() {
+      savedGameState = {
+        score: score,
+        level: level,
+        lives: 1, // 이어서 할 때는 목숨 1개로 시작
+        currentExperience: currentExperience,
+        experienceForNextLevel: experienceForNextLevel,
+        poopSpeed: poopSpeed,
+        poopFrequency: poopFrequency,
+        poopSize: poopSize,
+        maxPoops: maxPoops,
+        specialPoopChance: specialPoopChance
+      };
+      
+      // 로컬 스토리지에 저장 (선택적)
+      try {
+        localStorage.setItem('savedGameState', JSON.stringify(savedGameState));
+      } catch (e) {
+        console.log("로컬 스토리지 저장 실패");
+      }
+      
+      console.log("게임 상태 저장됨:", savedGameState);
+    }
+    
+    // 게임 상태 복원 함수
+    function restoreGameState() {
+      if (!savedGameState) return false;
+      
+      score = savedGameState.score;
+      level = savedGameState.level;
+      lives = savedGameState.lives;
+      currentExperience = savedGameState.currentExperience;
+      experienceForNextLevel = savedGameState.experienceForNextLevel;
+      poopSpeed = savedGameState.poopSpeed;
+      poopFrequency = savedGameState.poopFrequency;
+      poopSize = savedGameState.poopSize;
+      maxPoops = savedGameState.maxPoops;
+      specialPoopChance = savedGameState.specialPoopChance;
+      
+      document.getElementById('score').textContent = score;
+      document.getElementById('level').textContent = level;
+      document.getElementById('lives').textContent = lives;
+      
+      return true;
+    }
+    
+    // 광고 보기 및 게임 이어서 하기 함수
+    function showAdAndContinue() {
+      const adModal = document.getElementById('ad-modal');
+      const adTimer = document.getElementById('ad-timer');
+      const adCloseBtn = document.querySelector('.ad-close');
+      let remainingTime = 5;
+      
+      adModal.style.display = 'flex';
+      adTimer.textContent = remainingTime;
+      
+      const timerInterval = setInterval(() => {
+        remainingTime--;
+        adTimer.textContent = remainingTime;
+        
+        if (remainingTime <= 0) {
+          clearInterval(timerInterval);
+          adCloseBtn.disabled = false;
+          adCloseBtn.textContent = '게임 이어서 하기';
+        }
+      }, 1000);
+      
+      adCloseBtn.addEventListener('click', function() {
+        if (!adCloseBtn.disabled) {
+          adModal.style.display = 'none';
+          document.getElementById('game-over').style.display = 'none';
+          continueGame();
+        }
+      }, { once: true });
+    }
+    
+    // 게임 이어서 하기 함수
+    function continueGame() {
+      if (restoreGameState()) {
+        const poops = document.querySelectorAll('.poop, .special-poop, .power-up');
+        poops.forEach(poop => poop.remove());
+        
+        isGameOver = false;
+        gameStarted = true;
+        
+        poopInterval = setInterval(createPoop, poopFrequency);
+        specialPoopInterval = setInterval(createSpecialPoop, poopFrequency * 3);
+        powerUpInterval = setInterval(createPowerUp, 15000);
+        scoreInterval = setInterval(() => {
+          if (!isGameOver) {
+            increaseScore(1);
+          }
+        }, 1000);
+        levelUpInterval = setInterval(checkLevelUp, 500);
+      } else {
+        // 저장된 상태가 없으면 새 게임 시작
+        startGame();
+      }
+    }
+    
     // 게임 오버 함수
     function gameOver() {
+      if (isGameOver) return; // 이미 게임 오버 상태면 중복 처리 방지
+      
       isGameOver = true;
       clearAllIntervals();
+      
+      // 게임 화면의 모든 요소 정리
+      const poops = document.querySelectorAll('.poop, .special-poop, .power-up');
+      poops.forEach(poop => poop.remove());
+      
+      // 게임 오버 화면 업데이트
       document.getElementById('final-score').textContent = score;
       document.getElementById('final-level').textContent = level;
       updateLevelProgressBar();
+      
+      // 이어하기 버튼은 항상 표시
+      const continueBtn = document.getElementById('continue-btn');
+      continueBtn.style.display = 'inline-block';
+      
+      // 게임 오버 화면 표시
       document.getElementById('game-over').style.display = 'block';
+      
+      console.log("게임 오버 처리됨. 목숨:", lives, "점수:", score);
     }
 
     // 화면 크기 변경 시 페이지 새로고침
