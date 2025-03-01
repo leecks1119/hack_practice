@@ -46,7 +46,7 @@
       z-index: 5;
       background-size: cover;
     }
-    /* HUD 및 UI 요소들을 부드러운 파스텔 스타일로 */
+    /* HUD 및 UI 요소들을 부드러운 파스텔 스타일로 - 모바일 화면 대응 수정 */
     #hud {
       position: absolute;
       top: 0;
@@ -56,6 +56,7 @@
       display: flex;
       justify-content: space-between;
       z-index: 20;
+      box-sizing: border-box;
     }
     .hud-element {
       background-color: rgba(255, 255, 255, 0.8);
@@ -64,6 +65,18 @@
       border-radius: 10px;
       font-size: 14px;
       box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+      /* 목숨 표시가 잘리지 않도록 최소 너비 설정 */
+      min-width: 70px;
+      text-align: center;
+      margin: 0 2px;
+      white-space: nowrap;
+    }
+    @media (max-width: 480px) {
+      .hud-element {
+        padding: 4px 6px;
+        font-size: 12px;
+        min-width: 60px;
+      }
     }
     #game-over {
       position: absolute;
@@ -110,6 +123,8 @@
       color: #FF69B4;
       margin-bottom: 20px;
       text-shadow: 0 0 10px #FFD700;
+      text-align: center;
+      padding: 0 15px;
     }
     #difficulty-selector {
       margin: 20px;
@@ -607,6 +622,7 @@ function checkPowerUpCollision(powerUp, interval) {
       document.getElementById('game-over').style.display = 'block';
     }
 
+    // 화면 크기 변경 시 페이지 새로고침
     window.addEventListener('resize', () => {
       location.reload();
     });
