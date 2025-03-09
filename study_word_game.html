@@ -6,7 +6,7 @@
   <title>재미있는 학습 게임</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
     
 * {
   box-sizing: border-box;
@@ -220,14 +220,14 @@ body {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* 자동차 애니메이션 */
+/* 자동차 애니메이션 - 크기 대폭 증가 */
 .car-container {
   position: fixed;
   top: 50%;
   left: -200px;
-  width: 150px; /* 크기 증가 */
-  height: 150px; /* 크기 증가 */
-  font-size: 150px; /* 크기 증가 */
+  width: 250px; /* 150px에서 250px로 크게 증가 */
+  height: 250px; /* 150px에서 250px로 크게 증가 */
+  font-size: 250px; /* 150px에서 250px로 크게 증가 */
   transform: translateY(-50%);
   z-index: 1000;
   pointer-events: none;
@@ -236,23 +236,23 @@ body {
 @keyframes race {
   0% {
     left: -200px;
-    transform: translateY(-50%) rotate(-5deg) scale(1.2); /* 크기 증가 */
+    transform: translateY(-50%) rotate(-5deg) scale(1.8); /* 1.2에서 1.8로 크게 증가 */
   }
   20% {
-    transform: translateY(-40%) rotate(5deg) scale(1.3); /* 크기 증가 */
+    transform: translateY(-40%) rotate(5deg) scale(1.9); /* 1.3에서 1.9로 크게 증가 */
   }
   40% {
-    transform: translateY(-60%) rotate(-10deg) scale(1.4); /* 크기 증가 */
+    transform: translateY(-60%) rotate(-10deg) scale(2.0); /* 1.4에서 2.0으로 크게 증가 */
   }
   60% {
-    transform: translateY(-30%) rotate(5deg) scale(1.3); /* 크기 증가 */
+    transform: translateY(-30%) rotate(5deg) scale(1.9); /* 1.3에서 1.9로 크게 증가 */
   }
   80% {
-    transform: translateY(-50%) rotate(-5deg) scale(1.25); /* 크기 증가 */
+    transform: translateY(-50%) rotate(-5deg) scale(1.85); /* 1.25에서 1.85로 크게 증가 */
   }
   100% {
     left: calc(100% + 200px);
-    transform: translateY(-50%) rotate(0deg) scale(1.2); /* 크기 증가 */
+    transform: translateY(-50%) rotate(0deg) scale(1.8); /* 1.2에서 1.8로 크게 증가 */
   }
 }
 
@@ -260,11 +260,10 @@ body {
   position: absolute;
   top: 50%;
   left: calc(100% + 200px);
-  font-size: 150px;
+  font-size: 250px; /* 150px에서 250px로 크게 증가 */
   text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
   animation: race 5s ease-in-out forwards;
 }
-
 
 .exhaust {
   position: absolute;
@@ -341,14 +340,14 @@ body {
 .race-car {
   position: absolute;
   bottom: 20px;
-  font-size: 50px;
+  font-size: 80px; /* 50px에서 80px로 증가 */
   transition: left 0.1s ease;
 }
 
 .obstacle {
   position: absolute;
-  width: 50px; /* 크기 증가로 난이도 UP */
-  height: 50px;
+  width: 40px; /* 50px에서 40px로 조정 */
+  height: 40px; /* 50px에서 40px로 조정 */
   background: radial-gradient(circle, #ff0000, #990000);
   border-radius: 50%;
   animation: fall 1.5s linear forwards; /* 속도 증가로 난이도 UP */
@@ -403,11 +402,11 @@ body {
   .target-word { font-size: 40px; padding: 15px 30px; margin: 15px 0 20px; }
   .option-btn { font-size: 24px; height: 60px; }
   .mode-btn { font-size: 16px; }
-  .car-animation { font-size: 100px; }
+  .car-animation { font-size: 180px; } /* 100px에서 180px로 크게 증가 */
   .refuel-station { font-size: 70px; }
   .oil-drop { width: 15px; height: 15px; }
-  .race-car { font-size: 40px; }
-  .obstacle { width: 40px; height: 40px; } /* 모바일에서도 난이도 유지 */
+  .race-car { font-size: 60px; } /* 40px에서 60px로 증가 */
+  .obstacle { width: 40px; height: 40px; } /* 모바일에서도 크기 조정 */
 }
 
 button {
