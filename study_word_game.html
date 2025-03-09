@@ -418,7 +418,7 @@
     <div class="game-area">
       <div class="target-word">가</div>
       <div class="options-container" id="options"></div>
-      <div class="oil-display">🛢️ 모은 오일: <span id="oil" class="oil-value">0</span> / 10</div>
+      <div class="oil-display">🛢️ 모은 오일: <span id="oil" class="oil-value">0</span> / 5</div>
       <button class="next-btn" id="nextBtn" disabled>
         <span style="font-size: 32px;">다음 문제 ➡️</span>
       </button>
@@ -584,7 +584,7 @@
         
         showRefuelAnimation();
         
-        if (gameState.oilCount >= 10) {
+        if (gameState.oilCount >= 5) {
           showCarAnimation();
           gameState.oilCount = 0;
           oilElement.textContent = gameState.oilCount;
