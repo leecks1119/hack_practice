@@ -8,226 +8,226 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
     
-    * {
-      box-sizing: border-box;
-      font-family: 'Jua', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-    
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #ffeaa7 0%, #74b9ff 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      touch-action: manipulation;
-      overflow: hidden;
-    }
-    
-    .container {
-      width: 100%;
-      max-width: 500px;
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    .mode-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 20px;
-      width: 100%;
-      max-width: 400px;
-    }
-    
-    .mode-btn {
-      flex: 1;
-      padding: 15px 5px;
-      font-size: 18px;
-      background: linear-gradient(to bottom, #ff9a9e 0%, #fad0c4 100%);
-      color: #fff;
-      border: none;
-      border-radius: 50px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-    }
-    
-    .mode-btn:active {
-      transform: translateY(3px);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-    
-    .mode-btn.active {
-      background: linear-gradient(to bottom, #ff758c 0%, #ff7eb3 100%);
-      font-weight: bold;
-      transform: translateY(2px);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    }
-    
-    .game-area {
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 25px;
-      padding: 20px;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .game-area::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 10px;
-      background: linear-gradient(to right, #ff9a9e, #fad0c4, #fad0c4, #a18cd1, #fbc2eb);
-      background-size: 400% 400%;
-      animation: gradient 5s ease infinite;
-    }
-    
-    @keyframes gradient {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    
-    .target-word {
-      font-size: 48px;
-      font-weight: bold;
-      color: #2d3436;
-      margin: 20px 0 30px;
-      background: linear-gradient(45deg, #a18cd1 0%, #fbc2eb 100%);
-      padding: 20px 40px;
-      border-radius: 20px;
-      min-width: 180px;
-      text-align: center;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    
-    .options-container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      width: 100%;
-      max-width: 400px;
-      margin: 10px 0;
-    }
-    
-    .option-btn {
-      padding: 15px 10px;
-      font-size: 28px;
-      background: linear-gradient(to bottom, #fdcb6e 0%, #e17055 100%);
-      color: white;
-      border: none;
-      border-radius: 15px;
-      cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-      height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .option-btn:active {
-      transform: translateY(3px);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    }
-    
-    .option-btn.correct {
-      background: linear-gradient(to bottom, #55efc4 0%, #00b894 100%);
-      animation: correct-answer 0.5s;
-    }
-    
-    @keyframes correct-answer {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    
-    .option-btn.wrong {
-      background: linear-gradient(to bottom, #ff7675 0%, #d63031 100%);
-      animation: wrong-answer 0.5s;
-    }
-    
-    @keyframes wrong-answer {
-      0%, 20%, 40%, 60%, 80%, 100% { transform: translateX(0); }
-      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-      5%, 25%, 45%, 65%, 85%, 95% { transform: translateX(5px); }
-    }
-    
-    .oil-display {
-      margin-top: 25px;
-      font-size: 20px;
-      color: #0984e3;
-      background-color: rgba(255, 255, 255, 0.8);
-      padding: 8px 20px;
-      border-radius: 50px;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    .oil-value {
-      color: #e17055;
-      font-weight: bold;
-      font-size: 24px;
-    }
-    
-    .next-btn {
-      margin-top: 25px;
-      padding: 15px 30px;
-      font-size: 20px;
-      background: linear-gradient(to bottom, #a29bfe 0%, #6c5ce7 100%);
-      color: white;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-    }
-    
-    .next-btn:disabled {
-      background: linear-gradient(to bottom, #d3cce3 0%, #b2bec3 100%);
-      cursor: not-allowed;
-      box-shadow: none;
-      opacity: 0.7;
-    }
-    
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
-    
-    .next-btn:active:not(:disabled) {
-      transform: translateY(3px);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    }
-    
-    /* 자동차 애니메이션 */
+* {
+  box-sizing: border-box;
+  font-family: 'Jua', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #ffeaa7 0%, #74b9ff 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  overflow: hidden;
+}
+
+.container {
+  width: 100%;
+  max-width: 500px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mode-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 15px 5px;
+  font-size: 18px;
+  background: linear-gradient(to bottom, #ff9a9e 0%, #fad0c4 100%);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.mode-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.mode-btn.active {
+  background: linear-gradient(to bottom, #ff758c 0%, #ff7eb3 100%);
+  font-weight: bold;
+  transform: translateY(2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.game-area {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 25px;
+  padding: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.game-area::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: linear-gradient(to right, #ff9a9e, #fad0c4, #fad0c4, #a18cd1, #fbc2eb);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.target-word {
+  font-size: 48px;
+  font-weight: bold;
+  color: #2d3436;
+  margin: 20px 0 30px;
+  background: linear-gradient(45deg, #a18cd1 0%, #fbc2eb 100%);
+  padding: 20px 40px;
+  border-radius: 20px;
+  min-width: 180px;
+  text-align: center;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.options-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  width: 100%;
+  max-width: 400px;
+  margin: 10px 0;
+}
+
+.option-btn {
+  padding: 15px 10px;
+  font-size: 28px;
+  background: linear-gradient(to bottom, #fdcb6e 0%, #e17055 100%);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.option-btn.correct {
+  background: linear-gradient(to bottom, #55efc4 0%, #00b894 100%);
+  animation: correct-answer 0.5s;
+}
+
+@keyframes correct-answer {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.option-btn.wrong {
+  background: linear-gradient(to bottom, #ff7675 0%, #d63031 100%);
+  animation: wrong-answer 0.5s;
+}
+
+@keyframes wrong-answer {
+  0%, 20%, 40%, 60%, 80%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  5%, 25%, 45%, 65%, 85%, 95% { transform: translateX(5px); }
+}
+
+.oil-display {
+  margin-top: 25px;
+  font-size: 20px;
+  color: #0984e3;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 8px 20px;
+  border-radius: 50px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.oil-value {
+  color: #e17055;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.next-btn {
+  margin-top: 25px;
+  padding: 15px 30px;
+  font-size: 20px;
+  background: linear-gradient(to bottom, #a29bfe 0%, #6c5ce7 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.next-btn:disabled {
+  background: linear-gradient(to bottom, #d3cce3 0%, #b2bec3 100%);
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.next-btn:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* 자동차 애니메이션 */
 .car-container {
   position: fixed;
   top: 50%;
   left: -200px;
-  width: 250px; /* 크기 증가 */
-  height: 250px; /* 크기 증가 */
-  font-size: 250px; /* 크기 증가 */
+  width: 150px; /* 크기 증가 */
+  height: 150px; /* 크기 증가 */
+  font-size: 150px; /* 크기 증가 */
   transform: translateY(-50%);
   z-index: 1000;
   pointer-events: none;
@@ -256,166 +256,165 @@
   }
 }
 
-    
-    .car-animation {
-      position: absolute;
-      top: 50%;
-      left: calc(100% + 200px);
-      font-size: 150px;
-      text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
-      animation: race 5s ease-in-out forwards;
-    }
-    
-    
-    .exhaust {
-      position: absolute;
-      width: 40px;
-      height: 40px;
-      background: radial-gradient(circle, rgba(255, 100, 0, 0.8), rgba(100, 100, 100, 0));
-      border-radius: 50%;
-      animation: exhaust-move 1.5s linear infinite;
-    }
-    
-    @keyframes exhaust-move {
-      0% { opacity: 0.8; transform: translateX(0) scale(0.5); }
-      50% { opacity: 0.5; transform: translateX(150px) scale(1.2); }
-      100% { opacity: 0; transform: translateX(300px) scale(1.8); }
-    }
-    
-    /* 주유 애니메이션 */
-    .refuel-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 900;
-      pointer-events: none;
-    }
-    
-    .refuel-station {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      font-size: 100px;
-      transform: translate(-50%, -50%);
-      animation: refuel-station 1s ease-out forwards;
-    }
-    
-    @keyframes refuel-station {
-      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-      100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
-    }
-    
-    .oil-drop {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 20px;
-      height: 20px;
-      background: radial-gradient(circle, #ffcc00, #e17055);
-      border-radius: 50%;
-      animation: oil-drop 1s ease-out forwards;
-    }
-    
-    @keyframes oil-drop {
-      0% { opacity: 1; transform: translate(-50%, -50%) scale(0.5); }
-      100% { opacity: 0; transform: translate(-50%, 50%) scale(1.5); }
-    }
-    
-    /* 레이스 게임 - 난이도 증가 */
-    .race-game-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 2000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .race-car {
-      position: absolute;
-      bottom: 20px;
-      font-size: 50px;
-      transition: left 0.1s ease;
-    }
-    
-    .obstacle {
-      position: absolute;
-      width: 50px; /* 크기 증가로 난이도 UP */
-      height: 50px;
-      background: radial-gradient(circle, #ff0000, #990000);
-      border-radius: 50%;
-      animation: fall 1.5s linear forwards; /* 속도 증가로 난이도 UP */
-    }
-    
-    @keyframes fall {
-      0% { top: -50px; }
-      100% { top: 100%; }
-    }
-    
-    .timer {
-      position: absolute;
-      top: 20px;
-      color: #fff;
-      font-size: 24px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    }
-    
-    /* 기타 장식 */
-    .decoration {
-      position: fixed;
-      z-index: -1;
-      opacity: 0.6;
-      animation: float 15s ease-in-out infinite;
-      pointer-events: none;
-    }
-    
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      25% { transform: translate(50px, 25px) rotate(5deg); }
-      50% { transform: translate(25px, 50px) rotate(0deg); }
-      75% { transform: translate(-25px, 25px) rotate(-5deg); }
-    }
-    
-    .confetti {
-      position: fixed;
-      width: 10px;
-      height: 10px;
-      background-color: #ffd700;
-      opacity: 0;
-      z-index: 100;
-      pointer-events: none;
-    }
-    
-    @keyframes confetti-fall {
-      0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(calc(100vh + 100px)) rotate(360deg); opacity: 0; }
-    }
-    
-    @media (max-width: 480px) {
-      .container { padding: 10px; }
-      .target-word { font-size: 40px; padding: 15px 30px; margin: 15px 0 20px; }
-      .option-btn { font-size: 24px; height: 60px; }
-      .mode-btn { font-size: 16px; }
-      .car-animation { font-size: 100px; }
-      .refuel-station { font-size: 70px; }
-      .oil-drop { width: 15px; height: 15px; }
-      .race-car { font-size: 40px; }
-      .obstacle { width: 40px; height: 40px; } /* 모바일에서도 난이도 유지 */
-    }
-    
-    button {
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      appearance: none;
-    }
+.car-animation {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 200px);
+  font-size: 150px;
+  text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+  animation: race 5s ease-in-out forwards;
+}
+
+
+.exhaust {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle, rgba(255, 100, 0, 0.8), rgba(100, 100, 100, 0));
+  border-radius: 50%;
+  animation: exhaust-move 1.5s linear infinite;
+}
+
+@keyframes exhaust-move {
+  0% { opacity: 0.8; transform: translateX(0) scale(0.5); }
+  50% { opacity: 0.5; transform: translateX(150px) scale(1.2); }
+  100% { opacity: 0; transform: translateX(300px) scale(1.8); }
+}
+
+/* 주유 애니메이션 */
+.refuel-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 900;
+  pointer-events: none;
+}
+
+.refuel-station {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 100px;
+  transform: translate(-50%, -50%);
+  animation: refuel-station 1s ease-out forwards;
+}
+
+@keyframes refuel-station {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}
+
+.oil-drop {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle, #ffcc00, #e17055);
+  border-radius: 50%;
+  animation: oil-drop 1s ease-out forwards;
+}
+
+@keyframes oil-drop {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(0.5); }
+  100% { opacity: 0; transform: translate(-50%, 50%) scale(1.5); }
+}
+
+/* 레이스 게임 - 난이도 증가 */
+.race-game-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.race-car {
+  position: absolute;
+  bottom: 20px;
+  font-size: 50px;
+  transition: left 0.1s ease;
+}
+
+.obstacle {
+  position: absolute;
+  width: 50px; /* 크기 증가로 난이도 UP */
+  height: 50px;
+  background: radial-gradient(circle, #ff0000, #990000);
+  border-radius: 50%;
+  animation: fall 1.5s linear forwards; /* 속도 증가로 난이도 UP */
+}
+
+@keyframes fall {
+  0% { top: -50px; }
+  100% { top: 100%; }
+}
+
+.timer {
+  position: absolute;
+  top: 20px;
+  color: #fff;
+  font-size: 24px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* 기타 장식 */
+.decoration {
+  position: fixed;
+  z-index: -1;
+  opacity: 0.6;
+  animation: float 15s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(50px, 25px) rotate(5deg); }
+  50% { transform: translate(25px, 50px) rotate(0deg); }
+  75% { transform: translate(-25px, 25px) rotate(-5deg); }
+}
+
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background-color: #ffd700;
+  opacity: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+@keyframes confetti-fall {
+  0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(calc(100vh + 100px)) rotate(360deg); opacity: 0; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 10px; }
+  .target-word { font-size: 40px; padding: 15px 30px; margin: 15px 0 20px; }
+  .option-btn { font-size: 24px; height: 60px; }
+  .mode-btn { font-size: 16px; }
+  .car-animation { font-size: 100px; }
+  .refuel-station { font-size: 70px; }
+  .oil-drop { width: 15px; height: 15px; }
+  .race-car { font-size: 40px; }
+  .obstacle { width: 40px; height: 40px; } /* 모바일에서도 난이도 유지 */
+}
+
+button {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  appearance: none;
+}
   </style>
 </head>
 <body>
