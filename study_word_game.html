@@ -132,7 +132,7 @@
     }
     
     .option-btn {
-      padding: 15px 这就是10px;
+      padding: 15px 10px;
       font-size: 28px;
       background: linear-gradient(to bottom, #fdcb6e 0%, #e17055 100%);
       color: white;
@@ -200,9 +200,14 @@
       border-radius: 50px;
       cursor: pointer;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      display: none;
-      animation: bounce 1s infinite;
       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    
+    .next-btn:disabled {
+      background: linear-gradient(to bottom, #d3cce3 0%, #b2bec3 100%);
+      cursor: not-allowed;
+      box-shadow: none;
+      opacity: 0.7;
     }
     
     @keyframes bounce {
@@ -210,7 +215,7 @@
       50% { transform: translateY(-5px); }
     }
     
-    .next-btn:active {
+    .next-btn:active:not(:disabled) {
       transform: translateY(3px);
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
@@ -230,50 +235,20 @@
     .car-animation {
       position: absolute;
       top: 50%;
-      left: calc(100% + 200px); /* 오른쪽에서 시작 */
+      left: calc(100% + 200px);
       font-size: 150px;
       text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
       animation: race 5s ease-in-out forwards;
     }
     
     @keyframes race {
-      /* 첫 번째 단계: 오른쪽 → 왼쪽 직진 (1.5초) */
-      0% {
-        left: calc(100% + 200px);
-        top: 50%;
-        transform: translateY(-50%) rotate(0deg) scale(1);
-      }
-      30% {
-        left: -200px;
-        top: 50%;
-        transform: translateY(-50%) rotate(-10deg) scale(1.2);
-      }
-      /* 두 번째 단계: 현란한 움직임 (3.5초) */
-      40% {
-        left: 20%;
-        top: 20%;
-        transform: translateY(-50%) rotate(30deg) scale(1.3);
-      }
-      55% {
-        left: 70%;
-        top: 80%;
-        transform: translateY(-50%) rotate(360deg) scale(1.4); /* 360도 스핀 */
-      }
-      70% {
-        left: 40%;
-        top: 30%;
-        transform: translateY(-50%) rotate(-20deg) scale(1.2);
-      }
-      85% {
-        left: 60%;
-        top: 70%;
-        transform: translateY(-50%) rotate(20deg) scale(1.3);
-      }
-      100% {
-        left: -200px;
-        top: 50%;
-        transform: translateY(-50%) rotate(0deg) scale(1);
-      }
+      0% { left: calc(100% + 200px); top: 50%; transform: translateY(-50%) rotate(0deg) scale(1); }
+      30% { left: -200px; top: 50%; transform: translateY(-50%) rotate(-10deg) scale(1.2); }
+      40% { left: 20%; top: 20%; transform: translateY(-50%) rotate(30deg) scale(1.3); }
+      55% { left: 70%; top: 80%; transform: translateY(-50%) rotate(360deg) scale(1.4); }
+      70% { left: 40%; top: 30%; transform: translateY(-50%) rotate(-20deg) scale(1.2); }
+      85% { left: 60%; top: 70%; transform: translateY(-50%) rotate(20deg) scale(1.3); }
+      100% { left: -200px; top: 50%; transform: translateY(-50%) rotate(0deg) scale(1); }
     }
     
     .exhaust {
@@ -286,18 +261,9 @@
     }
     
     @keyframes exhaust-move {
-      0% {
-        opacity: 0.8;
-        transform: translateX(0) scale(0.5);
-      }
-      50% {
-        opacity: 0.5;
-        transform: translateX(150px) scale(1.2); /* 오른쪽에서 왼쪽이므로 방향 반대 */
-      }
-      100% {
-        opacity: 0;
-        transform: translateX(300px) scale(1.8);
-      }
+      0% { opacity: 0.8; transform: translateX(0) scale(0.5); }
+      50% { opacity: 0.5; transform: translateX(150px) scale(1.2); }
+      100% { opacity: 0; transform: translateX(300px) scale(1.8); }
     }
     
     /* 주유 애니메이션 */
@@ -342,6 +308,51 @@
       100% { opacity: 0; transform: translate(-50%, 50%) scale(1.5); }
     }
     
+    /* 레이스 게임 - 난이도 증가 */
+    .race-game-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .race-car {
+      position: absolute;
+      bottom: 20px;
+      font-size: 50px;
+      transition: left 0.1s ease;
+    }
+    
+    .obstacle {
+      position: absolute;
+      width: 50px; /* 크기 증가로 난이도 UP */
+      height: 50px;
+      background: radial-gradient(circle, #ff0000, #990000);
+      border-radius: 50%;
+      animation: fall 1.5s linear forwards; /* 속도 증가로 난이도 UP */
+    }
+    
+    @keyframes fall {
+      0% { top: -50px; }
+      100% { top: 100%; }
+    }
+    
+    .timer {
+      position: absolute;
+      top: 20px;
+      color: #fff;
+      font-size: 24px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* 기타 장식 */
     .decoration {
       position: fixed;
       z-index: -1;
@@ -380,6 +391,8 @@
       .car-animation { font-size: 100px; }
       .refuel-station { font-size: 70px; }
       .oil-drop { width: 15px; height: 15px; }
+      .race-car { font-size: 40px; }
+      .obstacle { width: 40px; height: 40px; } /* 모바일에서도 난이도 유지 */
     }
     
     button {
@@ -406,10 +419,16 @@
       <div class="target-word">가</div>
       <div class="options-container" id="options"></div>
       <div class="oil-display">🛢️ 모은 오일: <span id="oil" class="oil-value">0</span> / 10</div>
-      <button class="next-btn" id="nextBtn">
+      <button class="next-btn" id="nextBtn" disabled>
         <span style="font-size: 32px;">다음 문제 ➡️</span>
       </button>
     </div>
+  </div>
+  
+  <div id="raceGameContainer" class="race-game-container" style="display: none;">
+    <div id="raceCar" class="race-car">🏎️</div>
+    <div id="obstacles"></div>
+    <div class="timer">남은 시간: <span id="raceTimer">10</span>초</div>
   </div>
 
   <script>
@@ -419,7 +438,9 @@
       currentTarget: null,
       correctAnswer: null,
       optionsArray: [],
-      answered: false
+      answered: false,
+      raceActive: false,
+      carPosition: 50
     };
 
     const hangulChars = ['가', '나', '다', '라', '마', '바', '사', '아', '자', '차', '카', '타', '파', '하'];
@@ -447,7 +468,7 @@
 
     function generateQuestion() {
       gameState.answered = false;
-      nextButton.style.display = 'none';
+      nextButton.disabled = true; // 문제 생성 시 비활성화
       optionsContainer.innerHTML = '';
       
       if (gameState.currentMode === 'hangul') {
@@ -561,7 +582,7 @@
         gameState.oilCount++;
         oilElement.textContent = gameState.oilCount;
         
-        showRefuelAnimation(); // 주유 애니메이션 호출
+        showRefuelAnimation();
         
         if (gameState.oilCount >= 10) {
           showCarAnimation();
@@ -580,62 +601,154 @@
         });
       }
       
-      nextButton.style.display = 'block';
+      nextButton.disabled = false; // 정답 확인 후 버튼 활성화
       nextButton.classList.add('animate__animated', 'animate__bounceIn');
     }
 
-function showCarAnimation() {
-  const container = document.createElement('div');
-  container.className = 'car-container';
-  document.body.appendChild(container);
-  
-  const car = document.createElement('div');
-  car.className = 'car-animation';
-  car.textContent = '🏎️';
-  container.appendChild(car);
-  
-  // 배기 효과 추가
-  for (let i = 0; i < 30; i++) {
-    const exhaust = document.createElement('div');
-    exhaust.className = 'exhaust';
-    exhaust.style.left = `${Math.random() * 100}%`;
-    exhaust.style.top = `${Math.random() * 100}%`;
-    exhaust.style.animationDelay = `${Math.random() * 0.5}s`;
-    container.appendChild(exhaust);
-  }
-  
-  // 로컬 자동차 소리 재생
-  const audio = new Audio('car-pass-by-9111.mp3'); // 로컬 파일 경로
-  audio.play().catch((error) => console.log("사운드 재생 실패: ", error));
-  
-  car.addEventListener('animationend', () => {
-    container.remove();
-  });
-}
+    function showCarAnimation() {
+      const container = document.createElement('div');
+      container.className = 'car-container';
+      document.body.appendChild(container);
+      
+      const car = document.createElement('div');
+      car.className = 'car-animation';
+      car.textContent = '🏎️';
+      container.appendChild(car);
+      
+      for (let i = 0; i < 30; i++) {
+        const exhaust = document.createElement('div');
+        exhaust.className = 'exhaust';
+        exhaust.style.left = `${Math.random() * 100}%`;
+        exhaust.style.top = `${Math.random() * 100}%`;
+        exhaust.style.animationDelay = `${Math.random() * 0.5}s`;
+        container.appendChild(exhaust);
+      }
+      
+      const audio = new Audio('car-pass-by-9111.mp3');
+      audio.play().catch((error) => console.log("사운드 재생 실패: ", error));
+      
+      car.addEventListener('animationend', () => {
+        container.remove();
+        startRaceGame();
+      });
+    }
 
     function showRefuelAnimation() {
       const container = document.createElement('div');
       container.className = 'refuel-container';
       document.body.appendChild(container);
       
-      // 주유소 아이콘
       const station = document.createElement('div');
       station.className = 'refuel-station';
-      station.textContent = '⛽'; // 주유소 이모지
+      station.textContent = '⛽';
       container.appendChild(station);
       
-      // 오일 드롭 효과
       for (let i = 0; i < 5; i++) {
         const drop = document.createElement('div');
         drop.className = 'oil-drop';
-        drop.style.left = `${50 + (Math.random() - 0.5) * 20}%`; // 좌우로 약간 분산
+        drop.style.left = `${50 + (Math.random() - 0.5) * 20}%`;
         drop.style.animationDelay = `${i * 0.1}s`;
         container.appendChild(drop);
       }
       
       setTimeout(() => {
         container.remove();
-      }, 1000); // 1초 후 제거
+      }, 1000);
+    }
+
+    function startRaceGame() {
+      const raceContainer = document.getElementById('raceGameContainer');
+      const raceCar = document.getElementById('raceCar');
+      const obstaclesContainer = document.getElementById('obstacles');
+      const timerElement = document.getElementById('raceTimer');
+      
+      raceContainer.style.display = 'block';
+      gameState.raceActive = true;
+      raceCar.style.left = `${gameState.carPosition}%`;
+      obstaclesContainer.innerHTML = '';
+
+      let timeLeft = 10;
+      timerElement.textContent = timeLeft;
+
+      document.addEventListener('keydown', moveCar);
+      raceContainer.addEventListener('touchmove', handleTouchMove);
+
+      // 난이도 증가: 장애물 생성 간격 700ms로 단축
+      const obstacleInterval = setInterval(() => {
+        createObstacle(obstaclesContainer, raceCar);
+      }, 700);
+
+      const raceTimer = setInterval(() => {
+        timeLeft--;
+        timerElement.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          endRaceGame(true, raceContainer, obstacleInterval, raceTimer);
+        }
+      }, 1000);
+    }
+
+    function moveCar(event) {
+      if (!gameState.raceActive) return;
+      const raceCar = document.getElementById('raceCar');
+      if (event.key === 'ArrowLeft' && gameState.carPosition > 5) {
+        gameState.carPosition -= 5;
+      } else if (event.key === 'ArrowRight' && gameState.carPosition < 95) {
+        gameState.carPosition += 5;
+      }
+      raceCar.style.left = `${gameState.carPosition}%`;
+    }
+
+    function handleTouchMove(event) {
+      if (!gameState.raceActive) return;
+      const touch = event.touches[0];
+      const raceCar = document.getElementById('raceCar');
+      const containerWidth = document.getElementById('raceGameContainer').offsetWidth;
+      gameState.carPosition = Math.max(5, Math.min(95, (touch.clientX / containerWidth) * 100));
+      raceCar.style.left = `${gameState.carPosition}%`;
+    }
+
+    function createObstacle(container, car) {
+      const obstacle = document.createElement('div');
+      obstacle.className = 'obstacle';
+      obstacle.style.left = `${Math.random() * 90 + 5}%`;
+      container.appendChild(obstacle);
+
+      obstacle.addEventListener('animationend', () => {
+        obstacle.remove();
+      });
+
+      const checkCollision = setInterval(() => {
+        const carRect = car.getBoundingClientRect();
+        const obsRect = obstacle.getBoundingClientRect();
+        if (
+          carRect.left < obsRect.right &&
+          carRect.right > obsRect.left &&
+          carRect.top < obsRect.bottom &&
+          carRect.bottom > obsRect.top
+        ) {
+          endRaceGame(false, document.getElementById('raceGameContainer'), null, null, checkCollision);
+        }
+      }, 50);
+    }
+
+    function endRaceGame(success, container, obstacleInterval, raceTimer, collisionCheck) {
+      gameState.raceActive = false;
+      container.style.display = 'none';
+      document.removeEventListener('keydown', moveCar);
+      container.removeEventListener('touchmove', handleTouchMove);
+
+      if (obstacleInterval) clearInterval(obstacleInterval);
+      if (raceTimer) clearInterval(raceTimer);
+      if (collisionCheck) clearInterval(collisionCheck);
+
+      if (success) {
+        gameState.oilCount += 2;
+        oilElement.textContent = gameState.oilCount;
+        alert('레이스 성공! 오일 2개를 추가로 받았습니다!');
+        createConfetti();
+      } else {
+        alert('장애물에 부딪혔습니다. 다음 기회에 도전하세요!');
+      }
     }
 
     function shuffleArray(array) {
@@ -685,8 +798,10 @@ function showCarAnimation() {
     });
 
     nextButton.addEventListener('click', () => {
-      nextButton.classList.remove('animate__animated', 'animate__bounceIn');
-      generateQuestion();
+      if (!nextButton.disabled) {
+        nextButton.classList.remove('animate__animated', 'animate__bounceIn');
+        generateQuestion();
+      }
     });
     
     document.addEventListener('gesturestart', function(e) {
