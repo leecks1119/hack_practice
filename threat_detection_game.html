@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find the Threat - 보안 위협 탐지 체험 with SESIM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(255, 0, 0, 0.1) 0%, transparent 70%);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.5)); }
+            to { filter: drop-shadow(0 0 20px rgba(255, 107, 107, 0.8)); }
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 800px;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.6);
+        }
+
+        /* Game Section */
+        .game-section {
+            background: #0a0a0a;
+            position: relative;
+        }
+
+        .game-ui {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            text-align: center;
+        }
+
+        .timer {
+            font-size: 2rem;
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+        }
+
+        .instructions {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #00ff00;
+        }
+
+        .score {
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        #gameCanvas {
+            border: 2px solid #333;
+            cursor: crosshair;
+        }
+
+        /* Results Section */
+        .results {
+            text-align: center;
+            background: linear-gradient(135deg, #2c1810 0%, #8b0000 100%);
+        }
+
+        .result-box {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid #ff6b6b;
+            margin-bottom: 2rem;
+        }
+
+        .result-stats {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .miss-message {
+            font-size: 1.3rem;
+            color: #ffaa00;
+            margin-bottom: 1rem;
+        }
+
+        /* Case Study Section */
+        .case-study {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            text-align: center;
+        }
+
+        .news-box {
+            background: rgba(139, 0, 0, 0.2);
+            border: 2px solid #ff6b6b;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            max-width: 800px;
+        }
+
+        .news-headline {
+            font-size: 1.8rem;
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+        }
+
+        .news-content {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        /* AI Solution Section */
+        .ai-solution {
+            background: linear-gradient(135deg, #0a4d0a 0%, #1a5d1a 100%);
+            text-align: center;
+        }
+
+        .ai-demo {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            border: 2px solid #00ff00;
+            border-radius: 15px;
+            margin: 2rem 0;
+            position: relative;
+            background: #000;
+        }
+
+        .ai-message {
+            font-size: 1.5rem;
+            color: #00ff00;
+            margin-bottom: 2rem;
+        }
+
+        /* Final CTA Section */
+        .final-cta {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            text-align: center;
+        }
+
+        .final-message {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            max-width: 800px;
+        }
+
+        .contact-button {
+            background: linear-gradient(45deg, #00ff00, #00cc00);
+            border: none;
+            padding: 1.5rem 3rem;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 255, 0, 0.4);
+        }
+
+        .contact-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 255, 0, 0.6);
+        }
+
+        /* Floating particles background */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 10s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(-100px) translateY(100vh); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateX(100vw) translateY(-100px); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.2rem; }
+            #gameCanvas { width: 100%; height: 300px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="section hero" id="hero">
+        <div class="particles"></div>
+        <h1>🎯 Find the Threat</h1>
+        <p>당신은 지금 기업 보안팀입니다.<br>수천만 개의 데이터 로그 중에서<br><strong>보안 위협을 찾을 수 있을까요?</strong></p>
+        <button class="cta-button" onclick="startGame()">🚀 체험해보기</button>
+    </section>
+
+    <!-- Game Section -->
+    <section class="section game-section hidden" id="gameSection">
+        <div class="game-ui">
+            <div class="timer" id="timer">⏰ 10초</div>
+            <div class="instructions">🔍 빨간 위협을 클릭하세요!</div>
+            <div class="score">탐지: <span id="detected">0</span> | 놓친 위협: <span id="missed">0</span></div>
+        </div>
+        <canvas id="gameCanvas"></canvas>
+    </section>
+
+    <!-- Results Section -->
+    <section class="section results hidden" id="resultsSection">
+        <div class="result-box">
+            <div class="result-stats" id="resultStats">
+                ❌ 탐지: 2개 / 실제 위협: 15개
+            </div>
+            <div class="miss-message">
+                사람 눈으로는 <strong>이 정도입니다.</strong><br>
+                실제 보안 로그도 마찬가지입니다.
+            </div>
+        </div>
+        <button class="cta-button" onclick="showCaseStudy()">📰 실제 사례 보기</button>
+    </section>
+
+    <!-- Case Study Section -->
+    <section class="section case-study hidden" id="caseStudySection">
+        <div class="news-box">
+            <div class="news-headline">🚨 2025년 실제 사건</div>
+            <div class="news-content">
+                <strong>SKT, 개인정보 유출 사고 발생</strong><br><br>
+                작은 이상 징후 하나를 놓쳤고,<br>
+                그 결과 <strong>수십만 고객 정보가 유출</strong>되었습니다.<br><br>
+                💰 손해배상 및 과태료: <strong>수백억 원</strong><br>
+                📉 브랜드 신뢰도 하락: <strong>회복 불가능</strong>
+            </div>
+        </div>
+        <button class="cta-button" onclick="showAISolution()">🤖 AI 솔루션 보기</button>
+    </section>
+
+    <!-- AI Solution Section -->
+    <section class="section ai-solution hidden" id="aiSolutionSection">
+        <h2 class="ai-message">🤖 사람이 못 보는 걸, AI는 봅니다</h2>
+        <div class="ai-demo" id="aiDemo">
+            <canvas id="aiCanvas"></canvas>
+        </div>
+        <p style="font-size: 1.2rem; margin-bottom: 2rem;">
+            ✅ 실시간 위협 탐지 정확도: <strong>99.7%</strong><br>
+            ✅ 탐지 속도: <strong>0.001초</strong><br>
+            ✅ 24시간 무중단 모니터링
+        </p>
+        <button class="cta-button" onclick="showFinalCTA()">💡 솔루션 도입하기</button>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="section final-cta hidden" id="finalCTASection">
+        <div class="final-message">
+            🛡️ <strong>사고를 막는 가장 빠른 방법은,<br>그 조짐을 미리 알아채는 것입니다.</strong>
+        </div>
+        <button class="contact-button" onclick="contact()">
+            📞 AI 보안 도입 상담하기
+        </button>
+        <p style="margin-top: 1rem; opacity: 0.7;">
+            무료 데모 및 ROI 분석 제공
+        </p>
+    </section>
+
+    <script>
+        class ThreatDetectionGame {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.setupCanvas();
+                
+                this.dots = [];
+                this.threats = [];
+                this.gameTime = 10;
+                this.isRunning = false;
+                this.detected = 0;
+                this.totalThreats = 0;
+                
+                this.setupGame();
+            }
+            
+            setupCanvas() {
+                this.canvas.width = Math.min(window.innerWidth - 40, 1200);
+                this.canvas.height = Math.min(window.innerHeight - 200, 600);
+                
+                // 고해상도 지원
+                const rect = this.canvas.getBoundingClientRect();
+                const dpr = window.devicePixelRatio || 1;
+                this.canvas.width = rect.width * dpr;
+                this.canvas.height = rect.height * dpr;
+                this.ctx.scale(dpr, dpr);
+                this.canvas.style.width = rect.width + 'px';
+                this.canvas.style.height = rect.height + 'px';
+                
+                this.width = rect.width;
+                this.height = rect.height;
+            }
+            
+            setupGame() {
+                this.canvas.addEventListener('click', this.handleClick.bind(this));
+            }
+            
+            createDot(isThreat = false) {
+                return {
+                    x: -50,
+                    y: Math.random() * this.height,
+                    speed: Math.random() * 8 + 5,
+                    size: Math.random() * 3 + 2,
+                    isThreat: isThreat,
+                    alpha: Math.random() * 0.3 + 0.7,
+                    clicked: false,
+                    pulsePhase: Math.random() * Math.PI * 2
+                };
+            }
+            
+            handleClick(event) {
+                if (!this.isRunning) return;
+                
+                const rect = this.canvas.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+                
+                // 클릭한 위치에서 위협 찾기
+                for (let threat of this.threats) {
+                    if (!threat.clicked) {
+                        const distance = Math.sqrt(
+                            Math.pow(x - threat.x, 2) + Math.pow(y - threat.y, 2)
+                        );
+                        
+                        if (distance < threat.size * 3) {
+                            threat.clicked = true;
+                            this.detected++;
+                            document.getElementById('detected').textContent = this.detected;
+                            
+                            // 성공 효과
+                            this.createSuccessEffect(x, y);
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            createSuccessEffect(x, y) {
+                // 간단한 성공 효과
+                const particles = [];
+                for (let i = 0; i < 10; i++) {
+                    particles.push({
+                        x: x,
+                        y: y,
+                        vx: (Math.random() - 0.5) * 10,
+                        vy: (Math.random() - 0.5) * 10,
+                        life: 30,
+                        color: '#00ff00'
+                    });
+                }
+                this.successParticles = particles;
+            }
+            
+            update() {
+                // 새로운 점들 생성
+                if (Math.random() < 0.3) {
+                    const dot = this.createDot(false);
+                    this.dots.push(dot);
+                }
+                
+                // 위협 생성 (낮은 확률)
+                if (Math.random() < 0.05) {
+                    const threat = this.createDot(true);
+                    threat.size += 1; // 약간 더 크게
+                    this.threats.push(threat);
+                    this.totalThreats++;
+                }
+                
+                // 점들 업데이트
+                this.dots = this.dots.filter(dot => {
+                    dot.x += dot.speed;
+                    return dot.x < this.width + 100;
+                });
+                
+                this.threats = this.threats.filter(threat => {
+                    threat.x += threat.speed;
+                    threat.pulsePhase += 0.2;
+                    return threat.x < this.width + 100;
+                });
+                
+                // 성공 효과 업데이트
+                if (this.successParticles) {
+                    this.successParticles = this.successParticles.filter(p => {
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.life--;
+                        return p.life > 0;
+                    });
+                }
+            }
+            
+            render() {
+                // 배경 지우기
+                this.ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
+                this.ctx.fillRect(0, 0, this.width, this.height);
+                
+                // 일반 점들 그리기
+                this.ctx.fillStyle = 'rgba(128, 128, 128, 0.8)';
+                for (let dot of this.dots) {
+                    this.ctx.globalAlpha = dot.alpha;
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(dot.x, dot.y, dot.size, dot.size * 0.7, 0, 0, 2 * Math.PI);
+                    this.ctx.fill();
+                }
+                
+                // 위협 점들 그리기 (빨간색, 살짝 깜빡임)
+                for (let threat of this.threats) {
+                    if (threat.clicked) {
+                        this.ctx.fillStyle = '#00ff00'; // 클릭된 위협은 초록색
+                    } else {
+                        const pulse = Math.sin(threat.pulsePhase) * 0.3 + 0.7;
+                        this.ctx.fillStyle = `rgba(255, ${50 * pulse}, ${50 * pulse}, ${pulse})`;
+                    }
+                    
+                    this.ctx.globalAlpha = 1;
+                    this.ctx.beginPath();
+                    const size = threat.size * (1 + Math.sin(threat.pulsePhase) * 0.2);
+                    this.ctx.ellipse(threat.x, threat.y, size, size * 0.8, 0, 0, 2 * Math.PI);
+                    this.ctx.fill();
+                    
+                    // 위협 주변에 미묘한 글로우 효과
+                    if (!threat.clicked) {
+                        this.ctx.shadowColor = '#ff0000';
+                        this.ctx.shadowBlur = 10;
+                        this.ctx.beginPath();
+                        this.ctx.ellipse(threat.x, threat.y, size * 1.5, size * 1.2, 0, 0, 2 * Math.PI);
+                        this.ctx.fill();
+                        this.ctx.shadowBlur = 0;
+                    }
+                }
+                
+                // 성공 효과 그리기
+                if (this.successParticles) {
+                    for (let p of this.successParticles) {
+                        this.ctx.fillStyle = p.color;
+                        this.ctx.globalAlpha = p.life / 30;
+                        this.ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+                    }
+                }
+                
+                this.ctx.globalAlpha = 1;
+            }
+            
+            start() {
+                this.isRunning = true;
+                this.gameTime = 10;
+                this.detected = 0;
+                this.totalThreats = 0;
+                this.dots = [];
+                this.threats = [];
+                
+                const timer = setInterval(() => {
+                    this.gameTime--;
+                    document.getElementById('timer').textContent = `⏰ ${this.gameTime}초`;
+                    
+                    if (this.gameTime <= 0) {
+                        clearInterval(timer);
+                        this.end();
+                    }
+                }, 1000);
+                
+                const gameLoop = () => {
+                    if (this.isRunning) {
+                        this.update();
+                        this.render();
+                        requestAnimationFrame(gameLoop);
+                    }
+                };
+                gameLoop();
+            }
+            
+            end() {
+                this.isRunning = false;
+                const missed = this.totalThreats - this.detected;
+                document.getElementById('missed').textContent = missed;
+                
+                // 결과 표시
+                document.getElementById('resultStats').innerHTML = 
+                    `❌ 탐지: ${this.detected}개 / 실제 위협: ${this.totalThreats}개`;
+                
+                setTimeout(() => {
+                    showResults();
+                }, 1000);
+            }
+        }
+        
+        // AI 데모 클래스
+        class AIDemo {
+            constructor() {
+                this.canvas = document.getElementById('aiCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.setupCanvas();
+                this.dots = [];
+                this.threats = [];
+                this.aiDetections = [];
+            }
+            
+            setupCanvas() {
+                const container = document.getElementById('aiDemo');
+                this.canvas.width = container.offsetWidth;
+                this.canvas.height = container.offsetHeight;
+                this.width = this.canvas.width;
+                this.height = this.canvas.height;
+            }
+            
+            start() {
+                const loop = () => {
+                    this.update();
+                    this.render();
+                    requestAnimationFrame(loop);
+                };
+                loop();
+            }
+            
+            update() {
+                // 점 생성
+                if (Math.random() < 0.2) {
+                    this.dots.push({
+                        x: -20,
+                        y: Math.random() * this.height,
+                        speed: Math.random() * 6 + 3,
+                        size: Math.random() * 2 + 1
+                    });
+                }
+                
+                // 위협 생성
+                if (Math.random() < 0.03) {
+                    const threat = {
+                        x: -20,
+                        y: Math.random() * this.height,
+                        speed: Math.random() * 6 + 3,
+                        size: Math.random() * 3 + 2,
+                        detected: false
+                    };
+                    this.threats.push(threat);
+                    
+                    // AI가 즉시 탐지
+                    setTimeout(() => {
+                        threat.detected = true;
+                        this.aiDetections.push({
+                            x: threat.x,
+                            y: threat.y,
+                            life: 60
+                        });
+                    }, Math.random() * 500 + 100);
+                }
+                
+                // 업데이트
+                this.dots = this.dots.filter(dot => {
+                    dot.x += dot.speed;
+                    return dot.x < this.width + 50;
+                });
+                
+                this.threats = this.threats.filter(threat => {
+                    threat.x += threat.speed;
+                    return threat.x < this.width + 50;
+                });
+                
+                this.aiDetections = this.aiDetections.filter(detection => {
+                    detection.life--;
+                    return detection.life > 0;
+                });
+            }
+            
+            render() {
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+                this.ctx.fillRect(0, 0, this.width, this.height);
+                
+                // 일반 점들
+                this.ctx.fillStyle = 'rgba(128, 128, 128, 0.6)';
+                for (let dot of this.dots) {
+                    this.ctx.beginPath();
+                    this.ctx.arc(dot.x, dot.y, dot.size, 0, 2 * Math.PI);
+                    this.ctx.fill();
+                }
+                
+                // 위협들
+                for (let threat of this.threats) {
+                    if (threat.detected) {
+                        this.ctx.fillStyle = '#00ff00';
+                        this.ctx.strokeStyle = '#00ff00';
+                        this.ctx.lineWidth = 2;
+                        this.ctx.beginPath();
+                        this.ctx.arc(threat.x, threat.y, threat.size + 5, 0, 2 * Math.PI);
+                        this.ctx.stroke();
+                    } else {
+                        this.ctx.fillStyle = '#ff0000';
+                    }
+                    
+                    this.ctx.beginPath();
+                    this.ctx.arc(threat.x, threat.y, threat.size, 0, 2 * Math.PI);
+                    this.ctx.fill();
+                }
+                
+                // AI 탐지 효과
+                for (let detection of this.aiDetections) {
+                    const alpha = detection.life / 60;
+                    this.ctx.strokeStyle = `rgba(0, 255, 0, ${alpha})`;
+                    this.ctx.lineWidth = 3;
+                    this.ctx.beginPath();
+                    this.ctx.arc(detection.x, detection.y, 20, 0, 2 * Math.PI);
+                    this.ctx.stroke();
+                    
+                    this.ctx.fillStyle = `rgba(0, 255, 0, ${alpha * 0.7})`;
+                    this.ctx.font = '12px Arial';
+                    this.ctx.fillText('THREAT DETECTED', detection.x + 25, detection.y);
+                }
+            }
+        }
+        
+        let game;
+        let aiDemo;
+        
+        // 네비게이션 함수들
+        function startGame() {
+            document.getElementById('hero').classList.add('hidden');
+            document.getElementById('gameSection').classList.remove('hidden');
+            
+            game = new ThreatDetectionGame();
+            setTimeout(() => {
+                game.start();
+            }, 500);
+        }
+        
+        function showResults() {
+            document.getElementById('gameSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.remove('hidden');
+        }
+        
+        function showCaseStudy() {
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('caseStudySection').classList.remove('hidden');
+        }
+        
+        function showAISolution() {
+            document.getElementById('caseStudySection').classList.add('hidden');
+            document.getElementById('aiSolutionSection').classList.remove('hidden');
+            
+            aiDemo = new AIDemo();
+            aiDemo.start();
+        }
+        
+        function showFinalCTA() {
+            document.getElementById('aiSolutionSection').classList.add('hidden');
+            document.getElementById('finalCTASection').classList.remove('hidden');
+        }
+        
+        function contact() {
+            alert('🎉 상담 신청이 접수되었습니다!\n\n담당자가 24시간 내에 연락드리겠습니다.\n\n📧 이메일: security@aicompany.com\n📞 전화: 02-1234-5678');
+        }
+        
+        // 배경 파티클 생성
+        function createParticles() {
+            const containers = document.querySelectorAll('.particles');
+            containers.forEach(container => {
+                for (let i = 0; i < 50; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 10 + 's';
+                    particle.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                    container.appendChild(particle);
+                }
+            });
+        }
+        
+        // 페이지 로드 시 초기화
+        window.addEventListener('load', () => {
+            createParticles();
+        });
+        
+        // 리사이즈 처리
+        window.addEventListener('resize', () => {
+            if (game) game.setupCanvas();
+            if (aiDemo) aiDemo.setupCanvas();
+        });
+    </script>
+</body>
+</html>
